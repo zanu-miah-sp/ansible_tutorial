@@ -1,0 +1,18 @@
+---
+
+- name: upgrade packages on all hosts
+  hosts: all
+  become: true
+  tasks:
+    - name: upgrade all packages
+      apt:
+       upgrade: dist
+       update_cache: yes
+      when: ansible_facts['os_family'] == "Debian"
+
+    - name: Upgrade packages on RHEL/CentOS/Fedora
+      dnf:
+        name: "*"
+        state: latest
+        update_cache: yes
+      when: ansible_facts['os_family'] == "RedHat"
